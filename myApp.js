@@ -65,15 +65,27 @@ const findPersonById = (personId, done) => {
 };
 
 const findEditThenSave = (personId, done) => {
-  const foodToAdd = "hamburger";
+  foodToAdd="hamburger";
+  Person.findById(personId, (err, person) => {
+  if (err) return console.log(err);
+  
+  person.favoriteFoods.push(foodToAdd); // Add the new food to favoriteFoods
+  
+  person.save((err, data) => {
+    if (err) return console.error(err);
+    done(null, data); // Pass the saved document to the callback
+  });
+});
 
-  done(null /*, data*/);
 };
 
 const findAndUpdate = (personName, done) => {
   const ageToSet = 20;
+  Person.findOneAndUpdate({name:personName},{age:ageToSet},{ new: true},(err, updatedDoc) => {
+    if(err) return console.log(err);
+    done(null, updatedDoc);
+  })
 
-  done(null /*, data*/);
 };
 
 const removeById = (personId, done) => {
