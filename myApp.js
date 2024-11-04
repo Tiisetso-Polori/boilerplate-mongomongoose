@@ -108,8 +108,15 @@ const removeManyPeople = (done) => {
 
 const queryChain = (done) => {
   const foodToSearch = "burrito";
+  var query = Person.find({ favoriteFoods: { $in: [foodToSearch] } }, (err, people) => {
+    if (err) return console.error(err);
+    console.log(people); // `people` will contain documents where favoriteFoods includes "hamburger"
+  });
 
-  done(null /*, data*/);
+  query.sort({name : 1}).limit(2).select({age: 0}).exec((err, people) =>{
+    if(err) console.log(err);
+    done(null ,people);
+  })
 };
 
 /** **Well Done !!**
